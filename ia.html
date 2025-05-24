@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Inteligencia Artificial Para Devs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .quiz-container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .question {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .option {
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .option:hover {
+            background-color: #e0e0e0;
+        }
+
+        .option.correct {
+            background-color: #40b930c2;
+            border-color: #c3e6cb;
+        }
+
+        .option.incorrect {
+            background-color: #ff001586;
+            border-color: #f5c6cb;
+        }
+
+        .result {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="quiz-container">
+        <h1>Inteligencia Artificial Para Devs</h1>
+        <div id="quiz"></div>
+        <button id="submit" class="btn" style="display:none;">Próxima Questão</button>
+        <button id="restart" class="btn" style="display:none;">Recomeçar Quiz Atualize A Pagina F5 ou Arraste pra
+            baixo</button>
+        <div id="results" class="result"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "Uma das técnicas bastante utilizadas em sistemas de apoio à decisão é o aprendizado de máquina, que se constitui em uma técnica:",
+                options: [
+                    "Para a exploração e análise de dados, visando descobrir padrões e regras, a princípio ocultos, importantes à aplicação.",
+                    " Para se realizar a criptografia inteligente de dados, objetivando a proteção da informação.",
+                    "Que visa sua distribuição e replicação em um cluster de servidores, visando aprimorar a disponibilidade de dados.",
+                    " De compactação de dados, normalmente bastante eficiente, permitindo grande desempenho no armazenamento de dados.",
+                    "De transmissão e  recepção de dados, permitindo a comunicação entre servidores, em tempo real."
+                ],
+                correct: 0
+            },
+            {
+                question: "A introdução da Inteligência Artificial em nossas rotinas trouxe o termo casa inteligente. Sobre o assunto, julgue as opções",
+                options: [
+                    "As vantagens de uma casa inteligente são: segurança e personalização, porém, devido ao elevado custo, ainda não saíram do papel, atualmente, são apenas projetos.",
+                    "Com a possibilidade de ajustar intensidade e potência e personalizar a usabilidade de aparelhos e eletrodomésticos, devido à ausência de economia de energia, o preço que se paga pelos gadgets não é viável.",
+                    "As casas inteligentes têm o objetivo de oferecer diversos recursos de automação que prometem tornar a vida mais tranquila.",
+                    " As casas inteligentes são uma das tecnologias mais antigas da IA, com seu modelo projetado nos anos 1960.",
+                    " Atualmente, as casas inteligentes são a realidade em uma grande maioria de cidades pelo mundo, principalmente no Brasil."
+                ],
+                correct: 2
+            },
+            {
+                question: "Um hospital público de uma grande cidade da região sudeste do Brasil está implantando uma rede Perceptron de múltiplas camadas (Multilayer Perceptron) para prever a ocorrência de diabetes. Essa rede perceptron de múltiplas camadas usará qual tipo de aprendizado em sua construção?",
+                options: [
+                    "Aprendizado Não supervisionada",
+                    "Aprendizado oculto",
+                    "Aprendizado de pesos",
+                    "Aprendizado final",
+                    "Aprendizado supervisionado"
+                ],
+                correct: 4
+            },
+            {
+                question: "Consiste em técnicas e modelos que podem aprender com dados e fornecer aplicativos de Inteligência Artificial. Depende mais da entrada humana para entender as distinções entre diferentes entradas de dados, uma vez que especialistas humanos precisam criar uma hierarquia de recursos, normalmente aprendendo com dados mais estruturados. Uma outra definição diz que essa técnica é a ciência de fazer os computadores agirem sem serem explicitamente programados. Qual das opções abaixo atende a essa definição?",
+                options: [
+                    "Inteligência artificial.",
+                    "Aprendizagem de máquina (Machine learning).",
+                    "Inteligência de negócios (Business intelligence).",
+                    "Perceptron de múltiplas camadas.",
+                    "Deep learning."
+                ],
+                correct: 1
+            },
+            {
+                question: "Quando estamos falando de mineração de textos, estamos falando de um processo de descoberta de conhecimento em bases de dados textuais. Como todo processo de KDD, sabemos que muito tempo será investido em pré-processamento e transformação de dados. Qual destas é uma opção viável de transformação de dados para este cenário?",
+                options: [
+                    "Embaralhamento de Dados",
+                    "Colocar dados em escala minmax",
+                    "Vetorização",
+                    "Classificação",
+                    "Regressão"
+                ],
+                correct: 2
+            },
+            {
+                question: "Fábricas de automóveis ou eletrodomésticos utilizam em larga escala robôs para automatizar as linhas de produção, padronizando as atividades e minimizando o nível operacional de erros. Como exemplo, robôs podem ser programados para executar soldas em pontos programados no espaço com alta precisão. Podemos classificar o robô de soldagem quanto às definições de IA como:",
+                options: [
+                    "Pensar como ser humano",
+                    "Pensar racionalmente",
+                    "Agir como ser humano",
+                    "Agir racionalmente",
+                    "Pensar e agir como ser humano"
+                ],
+                correct: 3
+            },
+            {
+                question: "O algoritmo de aprendizado de máquina K-means é um algoritmo de agrupamento estatístico que permite separar um conjunto de dados em K grupos disjuntos. Qual a técnica usada para isso?",
+                options: [
+                    "Classificação",
+                    "Regressão",
+                    "Clusterização",
+                    "Associação",
+                    "Simbolização"
+                ],
+                correct: 2
+            },
+            {
+                question: "Em uma rede convolutional neural network (CNN), essa camada é responsável por conectar cada nó na camada de saída diretamente a um nó na camada anterior. Essa camada realiza a tarefa de classificação com base nas características extraídas das camadas anteriores e seus diferentes filtros. Como é chamada essa camada em uma rede convolutional neural network?",
+                options: [
+                    "Camada de saída (Output Layer).",
+                    "Camada totalmente conectada (Fully Connected Layer).",
+                    "Camada convolucional (Convolutional layer).",
+                    "Camada de pooling (Pooling layer).",
+                    "Activation layer (Camada de ativação)."
+                ],
+                correct: 1
+            },
+            {
+                question: "Em uma rede neural artificial, esse componente é uma variável incluída na soma da função de ativação, com o objetivo de aumentar o grau de liberdade desta função, portanto, a capacidade de aproximação da rede. O valor deste componente é ajustado da mesma forma que os pesos sinápticos e pode ser atualizado e alterado pela rede neural durante o treinamento, assim como os pesos. As redes neurais artificiais, não sabem antecipadamente quais os valores a escolher para esse componente e permite mover valores em uma direção ou outra. Qual opção abaixo corresponde, corretamente, a esta definição?",
+                options: [
+                    "Backpropagation",
+                    "Camada oculta (Hidden layer)",
+                    "Feed Forward",
+                    "Viés (Bias)",
+                    "Camada de saída (Output layer)"
+                ],
+                correct: 3
+            },
+            {
+                question: "A inteligência artificial está cada vez mais presente nas nossas vidas. Nesse sentido, selecione a opção correta sobre o que significa o termo inteligência nesse contexto:",
+                options: [
+                    "Trata-se da capacidade dos sistemas pensarem por si só",
+                    "É a aplicação de regras condicionais",
+                    "É o estabelecimento de comportamentos aleatórios",
+                    "É a capacidade dos algoritmos de generalizar características dos dados de treinamento",
+                    "São comportamentos associados à escolha da linguagem de programação"
+                ],
+                correct: 3
+            },
+            {
+                question: "Nos anos 2000, a IA começou a ser amplamente aplicada na indústria de saúde, onde sistemas inteligentes passaram a auxiliar no diagnóstico de doenças, análise de imagens médicas e personalização de tratamentos, demonstrando a versatilidade da tecnologia. Em que área da saúde a IA teve um impacto significativo, conforme descrito no texto?",
+                options: [
+                    "Gerenciamento de registros médicos.",
+                    "Desenvolvimento de novos medicamentos.",
+                    "Diagnóstico de doenças.",
+                    "Automatização de cirurgias.",
+                    "Treinamento médico virtual."
+                ],
+                correct: 2
+            },
+            {
+                question: "O aprendizado de máquina comporta vários métodos de aprendizagem de acordo com o sinal. Identifique a opção que exemplifica esses métodos:",
+                options: [
+                    "Método de aprendizado inteligente e não inteligente",
+                    "Método de aprendizado estruturado e não estruturado",
+                    "Método de aprendizado supervisionado e não supervisionado",
+                    "Método de aprendizado por classificação e regressão",
+                    "Método de aprendizado por associação e memorização"
+                ],
+                correct: 2
+            },
+            {
+                question: "Esse algoritmo possui cinco componentes principais: camada de entrada, pesos, viés, função de ativação e camada de saída. É uma rede neural de camada única usada para aprendizado supervisionado de classificadores binários. Assinale a alternativa que apresenta a opção de rede que atende a essas características.",
+                options: [
+                    "Perceptron",
+                    "Perceptron de múltiplas camadas",
+                    "Inteligência Artificial",
+                    "Inteligência de negócios (Business Intelligence)",
+                    "Essas são as características de um perceptron. O perceptron é a arquitetura mais simples de rede neural."
+                ],
+                correct: 0
+            },
+            {
+                question: "Consiste em técnicas e modelos que podem aprender com dados e fornecer aplicativos de Inteligência Artificial. Depende mais da entrada humana para entender as distinções entre diferentes entradas de dados, uma vez que especialistas humanos precisam criar uma hierarquia de recursos, normalmente aprendendo com dados mais estruturados. Uma outra definição diz que essa técnica é a ciência de fazer os computadores agirem sem serem explicitamente programados. Qual das opções abaixo atende a essa definição?",
+                options: [
+                    "Inteligência artificial.",
+                    "Aprendizagem de máquina (Machine learning).",
+                    "Inteligência de negócios (Business intelligence).",
+                    "Perceptron de múltiplas camadas.",
+                    "Deep learning."
+                ],
+                correct: 1
+            },
+            {
+                question: "A visão computacional apresenta várias aplicações práticas. Selecione a opção correta que justifique o uso de visão computacional para detectar a veracidade do logotipo da marca de uma empresa.",
+                options: [
+                    "Aumentar o engajamento do público-alvo",
+                    "Reduzir o tempo de investigação do controle de qualidade",
+                    "Evitar fraudes",
+                    "Valorizar a marca da empresa",
+                    "Usar tecnologias avançadas para se posicionar diante dos competidores do mercado"
+                ],
+                correct: 2
+            },
+            {
+                question: "O Teste de Turing, concebido na década de 1950, estabeleceu um critério fundamental para avaliar a inteligência de um sistema de IA. Este teste envolve a capacidade do sistema de imitar o comportamento humano de forma convincente. Qual é o principal critério do Teste de Turing para determinar a inteligência de um sistema de IA?",
+                options: [
+                    "Capacidade de processamento de dados.",
+                    "Habilidade de imitar comportamento humano.",
+                    "Velocidade de resposta a estímulos.",
+                    "Precisão em tarefas de classificação.",
+                    "Eficiência no uso de recursos."
+                ],
+                correct: 1
+            },
+            {
+                question: "O agrupamento de dados no aprendizado de máquina procura grupos semelhantes e diferentes em uma massa de dados que caracterizam uma população de indivíduos. A categoria que se baseia na teoria dos grafos e dispensa a definição de protótipos utilizados para segmentar a base de dados em diferentes grupos é denominada:",
+                options: [
+                    "Classificação",
+                    "Regressão",
+                    "Clusterização",
+                    "Associação",
+                    "Delimitação"
+                ],
+                correct: 2
+            },
+            {
+                question: "A área dentro de NLP que se ocupa de entender a sensação e emoção que um texto passa explicitamente ou subliminarmente se chama _________.",
+                options: [
+                    "Análise de Sentimentos",
+                    "Análise Pragmática",
+                    "Análise Sintática",
+                    "Análise Semântica",
+                    "Análise Estilística"
+                ],
+                correct: 0
+            },
+            {
+                question: "Nesse tipo de aprendizado, um modelo é treinado com dados de um conjunto de dados rotulados, que consiste em um conjunto de recursos (atributos) e um rótulo. O modelo então aprende a prever o rótulo para exemplos não vistos. Esse conjunto de dados (dataset), é normalmente uma tabela com várias colunas representando recursos/atributos e uma coluna final para o rótulo. Essa descrição se refere a que tipo de aprendizado?",
+                options: [
+                    "Aprendizado Não supervisionado",
+                    "Aprendizado Supervisionado",
+                    "Aprendizado com a função de ativação",
+                    "Backpropagation (retropropagação)",
+                    "Aprendizado oculto"
+                ],
+                correct: 1
+            },
+            {
+                question: "Esse tipo de rede de deep learning são geralmente utilizadas para reconhecimento de imagem e vídeo, detecção de objetos, reconhecimento de caracteres, jogos (xadrez e Go) e reconhecimento de padrões e/ou visão computacional. Qual das opções abaixo atende a essa definição?",
+                options: [
+                    "Recurrent Neural Networks (RNN)",
+                    "Generative Adversarial Network (GANs)",
+                    "Autoencoders",
+                    "Redes Multilayer Perceptron",
+                    "Convolutional Neural Networks (CNN)"
+                ],
+                correct: 4
+            },
+            {
+                question: "Uma rede neural é formada por um conjunto de unidades de processamento simples que se comunicam enviando sinais uma para a outra por meio de conexões ponderadas. O componente elementar desse modelo são as unidades de processamento, também chamadas de:",
+                options: [
+                    "Partículas",
+                    "Cromossomos",
+                    "Genótipos",
+                    "Neurônios",
+                    "Objetivos"
+                ],
+                correct: 3
+            },
+            {
+                question: "Possui uma enorme capacidade de aprender com a experiência e seu poder vem de sua vasta estrutura paralela. Essa experiência é entregue por meio de exemplos obtidos do mundo real, definido como um conjunto de características formadas por dados de entrada e saída. Uma outra característica é que são frequentemente representadas como grafos direcionados, onde os vértices são neurônios e as arestas são sinapses. A direção da borda determina o tipo de alimentação, ou seja, como o neurônio recebe os sinais de entrada. Essa é a definição de:",
+                options: [
+                    "Perceptron",
+                    "Inteligência Artificial",
+                    "Neurônio biológico",
+                    "Inteligência de negócio (Business intelligence)",
+                    "Redes Neurais Artificiais (RNA)"
+                ],
+                correct: 4
+            },
+            {
+                question: "Essa camada é a primeira camada de uma rede convolutional neural network (CNN). Ela é o bloco de construção central de uma CNN e é onde ocorre a maior parte da computação. Requer alguns componentes que são: dados de entrada, um filtro e um mapa de recursos (features). Como é chamada a primeira camada de uma rede convolutional neural network?",
+                options: [
+                    "Camada de entrada (Input layer).",
+                    "Camada convolucional (Convolutional layer).",
+                    "Camada de pooling (Pooling layer).",
+                    "Activation layer (Camada de ativação).",
+                    "Camada totalmente conectada (Fully-Connected Layer)."
+                ],
+                correct: 1
+            },
+            {
+                question: "O Natural Language Toolkit, ou mais comumente NLTK, é um conjunto de bibliotecas e programas para processamento simbólico e estatístico de linguagem natural para inglês escrito na linguagem de programação Python. Qual processo podemos aplicar a esse framework para dividir uma frase em palavras ou tokens individuais?",
+                options: [
+                    "N-gramas",
+                    "Tokenização",
+                    "Lematização",
+                    "Stemização",
+                    "Acentuação"
+                ],
+                correct: 1
+            },
+            {
+                question: "Python é uma linguagem extremamente versátil. Selecione a opção correta que apresente o principal pacote do Python responsável por manipular vetores e que é bastante utilizado em aplicações de visão computacional.",
+                options: [
+                    "CV2",
+                    "Numpy",
+                    "Matplotlib",
+                    "Skimage",
+                    "Google.colab.patches"
+                ],
+                correct: 1
+            },
+            {
+                question: "Com o objetivo de obter informações por meio do aprendizado de máquina, verificou-se que o processo que estava sendo realizado consistia em reduzir o número de características de determinado objeto, identificando quais as características mais relevantes; verificou-se também o uso de algoritmos de aprendizado não supervisionados. Identifique que ação está sendo realizada:",
+                options: [
+                    "Regressão",
+                    "Classificação",
+                    "Clustering",
+                    "Estimativa de densidade",
+                    "Redução dimensional"
+                ],
+                correct: 4
+            },
+            {
+                question: "Em uma rede neural artificial, esse componente é caracterizado como uma coleção de números predeterminados contidos no programa, que são multiplicados pelo valor digitado no nó oculto, e em seguida um único número é criado adicionando entradas ponderadas. Assinale a alternativa que apresenta para qual componente de uma rede neural artificial essa definição é relevante.",
+                options: [
+                    "Camada de saída (Output layer)",
+                    "Camada oculta (Hidden layer)",
+                    "Activation function (Função de ativação)",
+                    "Camada de pesos (Weight layer)",
+                    "Viés (Bias)"
+                ],
+                correct: 3
+            },
+            {
+                question: `Assinale as afirmacoes a seguir com V para verdadeiro ou F para falso e depois marque a alternativa correta:<br><br>
+                         ( ) Sistema especialista consiste em uma técnica de IA desenvolvida para resolver problemas em um determinado domínio, cujo conhecimento utilizado é obtido de pessoas que são especialistas naquele domínio.<br><br> 
+                         ( ) Dendral foi um sistema desenvolvido em 1965, contendo redes neurais artificiais para resolver problemas relacionados à química orgânica<br><br>. 
+                         ( ) A fase da implementação do sistema especialista é considerada a parte mais sensível no desenvolvimento de um SE, muitas vezes, o gargalo do processo.<br><br>`,
+                options: [
+                    "V-F-V",
+                    "V-F-F",
+                    "V-V-V",
+                    "F-F-F",
+                    "F-V-F"
+                ],
+                correct: 1
+            },
+            {
+                question: "Nessa arquitetura de rede neural artificial, apenas os neurônios vencedores são propagados (ativados) no final de cada ciclo, determinados por quão semelhantes são os requisitos de entrada e os neurônios. Possui realimentação, ou seja, a saída de um neurônio é utilizada como entrada para o próprio neurônio e/ou para outros neurônios das camadas anteriores. Essa arquitetura é composta de duas camadas, a camada de entrada também é chamada de 'fonte' e a camada de saída também é chamada de 'grau'. Qual opção abaixo corresponde, corretamente, a essa definição?",
+                options: [
+                    "Rede ativa",
+                    "Backpropagation",
+                    "Rede competitiva",
+                    "Feed forward (redes diretas)",
+                    "Feed backward networks (redes recorrentes)"
+                ],
+                correct: 2
+            },
+            {
+                question: "No dia a dia de qualquer projeto de desenvolvimento é necessário preocupar-se com a qualidade e posterior manutenção dos códigos. Isso também ocorre em aplicações de visão computacional. Por isso mesmo, é tão importante o uso de frameworks. Nesse sentido, selecione a opção correta que apresente uma vantagem de usar frameworks para desenvolver aplicações de visão computacional.",
+                options: [
+                    "Padronizar o desenvolvimento com estruturas padrões de código",
+                    "Trabalhar exatamente como as bibliotecas",
+                    "Utilizar os melhores algoritmos de visão computacional",
+                    "Oferecer garantia de suporte sempre que houver algum bug de funcionalidade",
+                    "Aumentar a quantidade de código para priorizar a manutenção posteriormente"
+                ],
+                correct: 0
+            },
+            {
+                question: "Com o objetivo de obter informações por meio do aprendizado de máquina, verificou-se que o processo que estava sendo realizado consistia em examinar as características de determinado objeto e prever um determinado valor numérico baseado em dados conhecidos; verificou-se também o uso de algoritmos de aprendizado supervisionados. Identifique que ação está sendo realizada:",
+                options: [
+                    "Classificação",
+                    "Estimativa de densidade",
+                    "Regressão",
+                    "Redução dimensional",
+                    "Clustering"
+                ],
+                correct: 2
+            },
+            {
+                question: "Com o objetivo de obter informações por meio do aprendizado de máquina, verificou-se que o processo que estava sendo realizado consistia em examinar as características de determinado objeto e atribuir-lhe uma ou mais classes; verificou-se também o uso de algoritmos de aprendizado supervisionados. Identifique que ação está sendo realizada:",
+                options: [
+                    "Estimativa de densidade",
+                    "Regressão",
+                    "Redução dimensional",
+                    "Classificação",
+                    "Clustering"
+                ],
+                correct: 3
+            },
+            {
+                question: "De acordo com os paradigmas de Inteligência Artificial, pode-se afirmar que um modelo simbolista:",
+                options: [
+                    "Lida apenas com símbolos gráficos.",
+                    "É um modelo que aprende a partir dos dados.",
+                    "Lida com conhecimento explícito e representado simbolicamente.",
+                    "É formado por uma rede de elementos conectados por pesos que detêm o conhecimento.",
+                    "Não possui conhecimento representado explicitamente."
+                ],
+                correct: 2
+            },
+            {
+                question: `Correlacione os itens a seguir:<br><br>
+            (S) Treinamento supervisionado<br><br>
+            (N) Treinamento não supervisionado<br><br>
+            com<br><br>
+            I - A rede neural artificial aprende a partir de padrões conhecidos.<br><br>
+            II - O treinamento é direcionado para diminuir o erro na saída.<br><br> 
+            III - Os padrões de treinamento possuem apenas entradas.<br><br> 
+            Assinale a alternativa correta:<br><br>`,
+
+                options: [
+                    "I(S), II(S) e III(N)",
+                    "I(N), II(N) e III(N)",
+                    "I(N), II(N) e III(S)",
+                    "I(N), II(S) e III(S)",
+                    "I(S), II(S) e III(S)",
+
+                ],
+                correct: 0
+            },
+            {
+                question: "Nesse tipo de aprendizado, os modelos resultantes envolvem atividades como: o agrupamento de exemplos semelhantes (clustering), redução de dimensionalidade e estimativa de densidade. Qual o tipo de aprendizado estamos nos referindo?",
+                options: [
+                    "Aprendizado supervisionado",
+                    "Aprendizado inicial",
+                    "Aprendizado Não supervisionado",
+                    "Aprendizado oculto",
+                    "Backpropagation (retropropagação)"
+                ],
+                correct: 2
+            },
+            {
+                question: "Essa técnica emprega redes neurais artificiais de várias camadas para obter alta precisão em tarefas como detecção de objetos, reconhecimento de fala, tradução de idiomas e outros avanços tecnológicos noticiados com frequência pela mídia. Qual das opções abaixo atende a essa definição?",
+                options: [
+                    "Perceptron de múltiplas camadas.",
+                    "Deep Learning.",
+                    "Aprendizagem de máquina (Machine learning).",
+                    "Inteligência artificial.",
+                    "Inteligência de negócios (Business intelligence)."
+                ],
+                correct: 1
+            },
+            {
+                question: "Existem diversas técnicas que são usadas para o reconhecimento de imagens. Uma das que mais se destaca é a de segmentação de imagens. Nesse sentido, selecione a opção correta a respeito do objetivo da técnica de segmentação de imagens.",
+                options: [
+                    "Suavizar os tons de cores da imagem",
+                    "Descrever formas dos objetos",
+                    "Agrupar os elementos da imagem por semelhanças",
+                    "Dar nomeclatura para os itens da imagem",
+                    "Destacar cores"
+                ],
+                correct: 2
+            },
+            {
+                question: "Dado que estamos falando de linguagem, estamos falando também de cultura, de expressões idiomáticas, e regionalismos. Sendo assim, cada modelo de NLP terá cobertura de acerto para a linguagem dos conjuntos sobre os quais aprendeu. Sendo assim, nesse caso, o que devemos variar ou unir (por concatenação de conjunto de dados)?",
+                options: [
+                    "Vocabulário",
+                    "Dicionário",
+                    "Sentenças",
+                    "Corpus",
+                    "Tokens"
+                ],
+                correct: 3
+            },
+            {
+                question: "Comparando inteligência humana com inteligência artificial, os sistemas que pensam e agem como humanos, e os sistemas que pensam e agem racionalmente são, respectivamente:",
+                options: [
+                    "Lógica, Teste de Turing, Agentes racionais e Ciência Cognitiva.",
+                    "Ciência Cognitiva, Teste de Turing, Agentes racionais e Lógica.",
+                    "Ciência Cognitiva, Lógica, Teste de Turing e Agentes racionais.",
+                    "Lógica, Teste de Turing, Ciência Cognitiva e Agentes racionais.",
+                    "Ciência Cognitiva, Teste de Turing, Lógica e Agentes racionais."
+                ],
+                correct: 4
+            },
+            {
+                question: `As Redes Neurais Artificiais têm sido amplamente usadas por exemplo em tarefas de reconhecimento de 
+                           imagem, diagnóstico na medicina, processamento de linguagem natural, previsão de séries temporais, e têm 
+                           uma infinidade de aplicações possíveis. Você já se perguntou como funcionam os sistemas de 
+                           reconhecimento de imagem e voz? Como um aplicativo do seu celular faz para detectar rostos, ou um 
+                           mecanismo de buscas sugere um termo?<br><br> 
+
+                Entendendo que as redes neurais artificiais possuem vantagens e desvantagens, analise as afirmativas a seguir:<br><br>
+                I. Requer muitos dados de treinamento limpos.<br><br>
+                II. Arquitetura facilmente adaptável a vários domínios de problemas.<br><br>
+                III. Dificuldade na interpretação dos resultados.<br><br>
+                IV. A rede neural aprende com os dados analisados e não requer reprogramação.<br><br>
+                V. Requer alto poder computacional.<br><br>`,
+                options: [
+                    "II, apenas.",
+                    "I e IV, apenas.",
+                    "II e III e IV, apenas.",
+                    "II e IV, apenas.",
+                    "I, II, III, IV e apenas."
+                ],
+                correct: 3
+            },
+            {
+                question: "As redes usam aprendizado não supervisionado para treinar dois modelos em paralelo, colocando, desta forma, uma contra a outra, dando origem ao termo 'adversária'. Essas redes são utilizadas para sintetizar novas imagens com base em outras imagens de treinamento, sendo muito utilizadas também para modelar outros domínios, tais como: som, vídeo, geração de imagens de descrições de texto. Qual opção preenche corretamente a lacuna?",
+                options: [
+                    "Recurrent Neural Networks (RNN).",
+                    "Redes Multilayer Perceptron.",
+                    "Deep learning.",
+                    "Generative Adversarial Network (GANs).",
+                    "Autoencoders."
+                ],
+                correct: 3
+            },
+            {
+                question: `Julgue os itens que se seguem acerca de Inteligência Artificial.<br><br> 
+                I. Em Inteligência Artificial, pode-se adotar dois paradigmas de modelagem, o conexionista e o simbólico. Redes 
+                neurais e algoritmos genéticos estão mais associados ao primeiro, enquanto o uso de linguagens como Prolog e Lisp 
+                está relacionado ao segundo.<br><br>
+                II.São exemplos de técnicas de inteligência computacional, os algoritmos genéticos e as redes neurais artificiais.<br><br>
+                III.Inteligência Artificial é um conjunto de métodos e(ou) técnicas que procura desenvolver sistemas dotados de 
+                comportamento semelhante a certos aspectos do comportamento inteligente.<br><br> 
+
+                Assinale a alternativa correta.<br><br>`,
+                options: [
+                    "Apenas as afirmativas I e II estão corretas.",
+                    "Todas as afirmativas estão corretas.",
+                    "Apenas as afirmativas II e III estão corretas.",
+                    "Todas as afirmativas estão incorretas.",
+                    "Apenas as afirmativas I e III estão corretas."
+                ],
+                correct: 2
+            },
+            {
+                question: "Em relação às aplicações de Inteligência Artificial na indústria de entretenimento, julgue as opções.",
+                options: [
+                    "O setor de entretenimento e o setor de jogos ainda não despertaram para os ganhos no investimento de aplicações usando Inteligência Artificial.",
+                    "A indústria de entretenimento investe apenas no setor de filmes de ficção por não existir investimento suficiente para expansão em outros setores.",
+                    "Na indústria altamente competitiva do entretenimento, empresas como Disney e outros gigantes estão usando a Inteligência Artificial para aprofundar a conexão com os consumidores por meio da personalização, otimização e experiência aprimorada.",
+                    "Os consumidores de entretenimento buscam constantemente aplicações com o uso de Inteligência Artificial, mas devido à complexidade do assunto, ainda não temos um número expressivo de aplicativos.",
+                    "O investimento no setor de entretenimento é um dos mais elevados, com constante atualização de tecnologia, porém, os consumidores não têm tanto entusiasmo com a tecnologia."
+                ],
+                correct: 2
+            },
+            {
+                question: "Um CEO de uma grande empresa farmacêutica quer implantar um projeto de deep learning com o objetivo de buscar insights para o crescimento da empresa no mercado e, portanto, precisa identificar os pontos positivos (prós) de uma solução de Deep Learning. Quais são os pontos positivos do Deep Learning?",
+                options: [
+                    "Alto custo de implementação.",
+                    "Necessidade de grande quantidade de dados limpos.",
+                    "Baixo tempo de treinamento das soluções.",
+                    "Arquitetura facilmente adaptável a vários domínios de problemas.",
+                    "Dificuldade na interpretação das informações."
+                ],
+                correct: 3
+            },
+            {
+                question: "Um gerente de projetos está identificando os riscos de um projeto de deep learning de sua organização e, portanto, precisa identificar os pontos negativos (contras) de uma solução dessas. Quais são os pontos negativos do Deep Learning?",
+                options: [
+                    "Desempenho de última geração.",
+                    "Arquitetura facilmente adaptável a vários domínios de problemas.",
+                    "Reduz a necessidade de engenharia de recursos.",
+                    "Dificuldade na interpretação das informações.",
+                    "Baixo custo de implementação."
+                ],
+                correct: 3
+            },
+            {
+                question: "Ainda que não pareça quando um computador escuta nossa voz por um microfone, ele também pode ser capaz de compreendê-la dado que tenha um componente de______________ programado nele. Que opção melhor se encaixa na lacuna?",
+                options: [
+                    "Inteligência Artificial",
+                    "Processamento de Áudio e Voz",
+                    "Processamento de Sinais",
+                    "Processamento de Imagem",
+                    "Processamento da Linguagem Natural"
+                ],
+                correct: 1
+            }
+
+
+
+
+
+
+
+
+
+            // Adicione mais questões aqui...
+        ];
+
+        let currentQuestionIndex = 0;
+        let shuffledOptions = [];
+        let correctAnswers = 0;
+        let wrongAnswers = 0;
+
+        function shuffleArray(array) {
+            const newArray = array.slice();
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function loadQuestion() {
+            const quiz = document.getElementById('quiz');
+            const currentQuestion = quizData[currentQuestionIndex];
+
+            shuffledOptions = currentQuestion.options.map((text, index) => ({
+                text,
+                isCorrect: index === currentQuestion.correct
+            }));
+            shuffledOptions = shuffleArray(shuffledOptions);
+
+            quiz.innerHTML = `
+        <div class="question">${currentQuestion.question}</div>
+        <ul class="options">
+          ${shuffledOptions.map((opt, idx) =>
+                `<li class="option" data-index="${idx}">${opt.text}</li>`
+            ).join('')}
+        </ul>
+      `;
+
+            const optionElements = document.querySelectorAll('.option');
+            optionElements.forEach(option => {
+                option.addEventListener('click', () => {
+                    if (document.querySelector('.option.correct')) return; // Impede duplo clique
+
+                    const idx = parseInt(option.getAttribute('data-index'));
+                    if (shuffledOptions[idx].isCorrect) {
+                        option.classList.add('correct');
+                        correctAnswers++;
+                    } else {
+                        option.classList.add('incorrect');
+                        wrongAnswers++;
+                        optionElements.forEach((optEl, i) => {
+                            if (shuffledOptions[i].isCorrect) {
+                                optEl.classList.add('correct');
+                            }
+                        });
+                    }
+                    document.getElementById('submit').style.display = 'block';
+                });
+            });
+        }
+
+        document.getElementById('submit').addEventListener('click', () => {
+            currentQuestionIndex++;
+            document.getElementById('submit').style.display = 'none';
+
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                document.getElementById('quiz').innerHTML = '';
+                document.getElementById('results').innerHTML = `
+          Você acertou <strong>${correctAnswers}</strong> e errou <strong>${wrongAnswers}</strong>.
+        `;
+                document.getElementById('restart').style.display = 'block';
+            }
+        });
+
+        document.getElementById('restart').addEventListener('click', () => {
+            currentQuestionIndex = 0;
+            correctAnswers = 0;
+            wrongAnswers = 0;
+            document.getElementById('results').innerText = '';
+            document.getElementById('restart').style.display = 'none';
+            document.getElementById('submit').style.display = 'none';
+            loadQuestion();
+        });
+
+        loadQuestion();
+    </script>
+</body>
+
+</html>
